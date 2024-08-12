@@ -50,17 +50,20 @@ public interface InputOutput {
         return readObject(prompt, errorPrompt, Double::parseDouble);
     }
 
-    default Double readNumberRange(String prompt, String errorPrompt, Double min, Double max) {
-        // Entered string must be a number in range (min <= number < max) otherwise, errorPrompt with cycle
-        return readObject(prompt, errorPrompt, s -> {
-            Double value = Double.parseDouble(s);
-            if (value < min) {
-                throw new IllegalArgumentException("Number must be more that " + min);
-            } else if (value >= max) {
-                throw new IllegalArgumentException("Number must be less than " + max);
-            }
-            return value;
-        });
+    default Double readNumberRange(String prompt, String errorPrompt, double min, double max) {
+        // Entered string must be a number in range (min <= number < max) otherwise,
+        // errorPrompt with cycle
+        return readObject(prompt, errorPrompt,
+                string -> {
+                    double res = Double.parseDouble(string);
+                    if (res < min) {
+                        throw new IllegalArgumentException("must be not less than " + min);
+                    }
+                    if (res > max) {
+                        throw new IllegalArgumentException("must be not greater than " + max);
+                    }
+                    return res;
+                });
     }
 
     default String readStringPredicate(String prompt, String errorPrompt, Predicate<String> predicate) {
@@ -73,7 +76,7 @@ public interface InputOutput {
         });
     }
 
-    default String readStringPredicate(String prompt, String errorPrompt, HashSet<String> options) {
+    default String readStringOptions(String prompt, String errorPrompt, HashSet<String> options) {
         // Entered String must one out of a given options
         return readStringPredicate(prompt, errorPrompt, options::contains);
     }
@@ -95,4 +98,5 @@ public interface InputOutput {
             return localDate;
         });
     }
+
 }

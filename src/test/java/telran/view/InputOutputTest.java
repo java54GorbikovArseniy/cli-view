@@ -24,8 +24,8 @@ public class InputOutputTest {
         io.writeLine(user);
     }
 
-    @Test
-    void readUserByFields() {
+@Test
+void readUserByFields() {
         String username = io.readStringPredicate("Enter username",
                 "Wrong username. Username must be at least 6 ascii letters - first letter Capital, others Lower case",
                 str -> str.matches("[A-Z][a-z]{5,}"));
@@ -35,7 +35,7 @@ public class InputOutputTest {
         LocalDate dateLastLogin = io.readIsoDateRange("Enter last login date", "Date wrong",
                 LocalDate.MIN, LocalDate.now().plusDays(1));
         String phoneNumber = io.readStringPredicate("Enter phone number", "Wrong phone number format",
-                s -> s.matches("^(\\\\+972|0)([23489]|5[0-9])\\\\d{7}$"));
+                s -> s.matches("^(\\+972|0)([23489]|5[0-9])\\d{7}$"));
         int numberOfLogins = io.readNumberRange("Enter number of logins", "number must be positive",
                 1.0, Double.MAX_VALUE).intValue();
         io.writeLine(new User(username, password, dateLastLogin, phoneNumber, numberOfLogins));
